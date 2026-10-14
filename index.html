@@ -15,7 +15,7 @@
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20261014d" />
+  <link rel="stylesheet" href="style.css?v=20261014e" />
 </head>
 <body>
   <div id="app-root">
@@ -52,9 +52,9 @@
     </div>
     <nav>
       <div class="nav-group">日常</div>
+      <a href="#ledger" data-view="ledger" class="nav-primary"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-ledger"/></svg>記帳</a>
       <a href="#dashboard" data-view="dashboard"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-dashboard"/></svg>總覽</a>
       <div class="nav-group">財務</div>
-      <a href="#ledger" data-view="ledger"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-ledger"/></svg>記帳</a>
       <a href="#finance" data-view="finance"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-finance"/></svg>理財</a>
       <a href="#plan" data-view="plan"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-plan"/></svg>計劃</a>
       <div class="nav-group">生活</div>
@@ -125,23 +125,32 @@
     <section id="view-ledger" class="view">
       <h2>記帳 <small>LEDGER</small></h2>
       <div class="panel funds-bar" id="tx-funds"></div>
-      <form class="panel tx-form" id="tx-form">
-        <div class="seg">
+      <form class="panel tx-form quick-tx" id="tx-form">
+        <div class="seg tx-type-seg">
           <label><input type="radio" name="type" value="expense" checked /><span>支出</span></label>
           <label><input type="radio" name="type" value="income" /><span>收入</span></label>
           <label><input type="radio" name="type" value="transfer" /><span>轉帳</span></label>
         </div>
+        <label class="tx-amount-wrap">金額
+          <input type="number" name="amount" class="tx-amount" step="0.01" min="0" inputmode="decimal" placeholder="0.00" required />
+        </label>
         <div class="chips" id="cat-chips"></div>
         <input type="hidden" name="category" id="tx-category" />
-        <div class="form-row">
-          <input type="date" name="date" required />
-          <input type="number" name="amount" step="0.01" min="0" placeholder="金額" required />
-          <select name="accountId" id="tx-account" title="使用的帳戶／信用卡" required></select>
-          <span class="tx-arrow">→</span>
-          <select name="toAccountId" id="tx-to" title="轉入的帳戶"></select>
-          <input name="note" placeholder="備註（可選）" />
-          <button type="submit">＋ 新增</button>
+        <div class="tx-fields">
+          <label>帳戶
+            <select name="accountId" id="tx-account" title="使用的帳戶／信用卡" required></select>
+          </label>
+          <label class="tx-to-wrap">轉入
+            <select name="toAccountId" id="tx-to" title="轉入的帳戶"></select>
+          </label>
+          <label>日期
+            <input type="date" name="date" required />
+          </label>
+          <label class="tx-note-wrap">備註
+            <input name="note" placeholder="可選" />
+          </label>
         </div>
+        <button type="submit" class="tx-submit">記一筆</button>
       </form>
 
       <div class="toolbar period-bar">
@@ -726,8 +735,8 @@
     </form>
   </div>
 
-  <script src="auth.config.js?v=20261014c"></script>
-  <script src="auth.js?v=20261014c"></script>
+  <script src="auth.config.js?v=20261014e"></script>
+  <script src="auth.js?v=20261014e"></script>
   <script>
     // 登入成功後才載入 App，避免未登入時 dialog／腳本擋住手機輸入
     Auth.onReady(function () {
@@ -743,7 +752,7 @@
         "time.js",
         "app.js",
       ];
-      var v = "?v=20261014c";
+      var v = "?v=20261014e";
       function next(i) {
         if (i >= files.length) return;
         var s = document.createElement("script");

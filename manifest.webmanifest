@@ -2,7 +2,7 @@
   "name": "手帳",
   "short_name": "手帳",
   "description": "個人日常記事",
-  "start_url": "./index.html",
+  "start_url": "./index.html#ledger",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",

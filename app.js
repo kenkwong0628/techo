@@ -245,10 +245,16 @@ function projectPct(p) {
 
 // ---------- 路由 ----------
 function route() {
-  const view = location.hash.slice(1) || "dashboard";
+  let view = location.hash.slice(1) || "ledger";
+  if (!document.getElementById(`view-${view}`)) view = "ledger";
+  if (!location.hash) history.replaceState(null, "", "#ledger");
   document.querySelectorAll(".view").forEach((v) => v.classList.toggle("active", v.id === `view-${view}`));
   document.querySelectorAll(".sidebar a").forEach((a) => a.classList.toggle("active", a.dataset.view === view));
   Effects.enterView(document.getElementById(`view-${view}`));
+  if (view === "ledger") {
+    const amt = document.querySelector('#tx-form [name="amount"]');
+    if (amt && matchMedia("(max-width: 760px)").matches) setTimeout(() => amt.focus(), 200);
+  }
 }
 window.addEventListener("hashchange", route);
 
@@ -1347,6 +1353,7 @@ $("#tx-form").addEventListener("submit", (e) => {
   e.target.elements.amount.value = "";
   e.target.elements.note.value = "";
   save(isTransfer ? `已由 ${accName(d.accountId)} 轉 ${money(amount)} 去 ${accName(d.toAccountId)}` : `已記錄${TYPE_LABEL[d.type]} ${money(amount)}`);
+  e.target.elements.amount.focus();
 });
 $("#tx-form").addEventListener("change", (e) => {
   if (e.target.name !== "type") return;
