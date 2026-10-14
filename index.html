@@ -2,25 +2,14 @@
 <html lang="zh-HK">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>手帳</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=20261014c" />
 </head>
 <body>
-  <div id="auth-gate" class="auth-gate">
-    <form id="auth-form" class="auth-card" autocomplete="current-password">
-      <div class="auth-mark">書</div>
-      <h1>手帳</h1>
-      <p class="muted">請輸入密碼後繼續</p>
-      <label class="auth-label">密碼
-        <input type="password" name="password" required autofocus />
-      </label>
-      <p id="auth-error" class="auth-error" role="alert"></p>
-      <button type="submit">進入</button>
-    </form>
-  </div>
+  <div id="app-root">
   <svg width="0" height="0" style="position:absolute">
     <defs>
       <g id="i-dashboard"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></g>
@@ -714,18 +703,48 @@
       <button type="button" id="backup-now">匯出備份</button>
     </div>
   </dialog>
+  </div><!-- #app-root -->
 
-  <script src="auth.config.js"></script>
-  <script src="auth.js"></script>
-  <script src="secrets/keys.js"></script>
-  <script src="secrets/personal.js"></script>
-  <script src="effects.js"></script>
-  <script src="sound.js"></script>
-  <script src="charts.js"></script>
-  <script src="body.js"></script>
-  <script src="ocr.js"></script>
-  <script src="plan.js"></script>
-  <script src="time.js"></script>
-  <script src="app.js"></script>
+  <div id="auth-gate" class="auth-gate">
+    <form id="auth-form" class="auth-card" autocomplete="on">
+      <div class="auth-mark">書</div>
+      <h1>手帳</h1>
+      <p class="muted">請輸入密碼後繼續</p>
+      <label class="auth-label" for="auth-password">密碼</label>
+      <input id="auth-password" type="password" name="password" required autocomplete="current-password" inputmode="text" enterkeyhint="go" />
+      <p id="auth-error" class="auth-error" role="alert"></p>
+      <button type="submit">進入</button>
+    </form>
+  </div>
+
+  <script src="auth.config.js?v=20261014c"></script>
+  <script src="auth.js?v=20261014c"></script>
+  <script>
+    // 登入成功後才載入 App，避免未登入時 dialog／腳本擋住手機輸入
+    Auth.onReady(function () {
+      var files = [
+        "secrets/keys.js",
+        "secrets/personal.js",
+        "effects.js",
+        "sound.js",
+        "charts.js",
+        "body.js",
+        "ocr.js",
+        "plan.js",
+        "time.js",
+        "app.js",
+      ];
+      var v = "?v=20261014c";
+      function next(i) {
+        if (i >= files.length) return;
+        var s = document.createElement("script");
+        s.src = files[i] + v;
+        s.onload = function () { next(i + 1); };
+        s.onerror = function () { next(i + 1); };
+        document.body.appendChild(s);
+      }
+      next(0);
+    });
+  </script>
 </body>
 </html>

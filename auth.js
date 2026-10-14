@@ -2,6 +2,7 @@
 const Auth = (() => {
   const SESSION_KEY = "techo-auth-ok";
   const readyCallbacks = [];
+  let booted = false;
 
   const unlocked = () => sessionStorage.getItem(SESSION_KEY) === "1";
 
@@ -16,7 +17,17 @@ const Auth = (() => {
     });
   }
 
+  function setShellLocked(locked) {
+    const root = document.getElementById("app-root");
+    if (root) {
+      if (locked) root.setAttribute("inert", "");
+      else root.removeAttribute("inert");
+    }
+  }
+
   function flushReady() {
+    if (booted) return;
+    booted = true;
     const fns = readyCallbacks.splice(0);
     for (const fn of fns) {
       try { fn(); } catch (e) { console.error(e); }
@@ -24,6 +35,8 @@ const Auth = (() => {
   }
 
   function showApp() {
+    closeBlockingUi();
+    setShellLocked(false);
     document.documentElement.classList.add("authed");
     document.getElementById("auth-gate")?.setAttribute("hidden", "");
     flushReady();
@@ -31,13 +44,17 @@ const Auth = (() => {
 
   function lockApp() {
     closeBlockingUi();
+    setShellLocked(true);
     document.documentElement.classList.remove("authed");
     const gate = document.getElementById("auth-gate");
     if (gate) gate.removeAttribute("hidden");
-    const input = document.querySelector("#auth-form [name=password]");
+    const input = document.getElementById("auth-password") || document.querySelector("#auth-form [name=password]");
     if (input) {
       input.value = "";
-      setTimeout(() => input.focus(), 50);
+      // 延遲 focus，等手機瀏覽器完成 layout
+      setTimeout(() => {
+        try { input.focus({ preventScroll: false }); } catch { input.focus(); }
+      }, 100);
     }
   }
 
@@ -53,13 +70,14 @@ const Auth = (() => {
 
   function logout() {
     sessionStorage.removeItem(SESSION_KEY);
-    lockApp();
+    // 重新載入最乾淨，避免殘留 modal／canvas 擋住下一次登入
+    location.reload();
   }
 
   /** 登入成功後才執行（已登入則立即執行） */
   function onReady(fn) {
     if (typeof fn !== "function") return;
-    if (document.documentElement.classList.contains("authed")) fn();
+    if (document.documentElement.classList.contains("authed") || booted) fn();
     else readyCallbacks.push(fn);
   }
 
@@ -69,44 +87,47 @@ const Auth = (() => {
       showApp();
       return;
     }
-    if (unlocked()) {
-      showApp();
-    } else {
-      lockApp();
-    }
+    if (unlocked()) showApp();
+    else lockApp();
+
     const form = document.getElementById("auth-form");
     const err = document.getElementById("auth-error");
     if (form && !form.dataset.bound) {
       form.dataset.bound = "1";
       form.addEventListener("submit", async (ev) => {
         ev.preventDefault();
-        err.textContent = "";
+        if (err) err.textContent = "";
         const password = form.elements.password.value;
         try {
           const ok = await tryUnlock(password);
           if (!ok) {
-            err.textContent = "密碼不正確";
-            Sound?.play?.("warn");
+            if (err) err.textContent = "密碼不正確";
+            form.elements.password.focus();
             form.elements.password.select();
-          } else {
-            Sound?.play?.("chime");
           }
         } catch (e) {
-          err.textContent = "無法驗證密碼";
+          if (err) err.textContent = "無法驗證密碼";
         }
+      });
+      // 點整張卡都聚焦密碼欄（方便手機）
+      form.addEventListener("pointerdown", (ev) => {
+        if (ev.target.closest("button, input, a")) return;
+        const input = form.elements.password;
+        if (input) input.focus();
       });
     }
     const logoutBtn = document.getElementById("auth-logout");
     if (logoutBtn && !logoutBtn.dataset.bound) {
       logoutBtn.dataset.bound = "1";
-      logoutBtn.addEventListener("click", () => {
-        logout();
-        Sound?.play?.("page");
-      });
+      logoutBtn.addEventListener("click", () => logout());
     }
   }
 
   return { init, logout, unlocked, onReady, showApp, lockApp };
 })();
 
-document.addEventListener("DOMContentLoaded", () => Auth.init());
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => Auth.init());
+} else {
+  Auth.init();
+}

@@ -38,21 +38,29 @@
 
 * { box-sizing: border-box; }
 
-/* 未登入時隱藏主介面 */
-html:not(.authed) body > :not(.auth-gate) { display: none !important; }
+/* 未登入：主介面不可互動；登入層獨立於最上層 */
+html:not(.authed) #app-root {
+  visibility: hidden !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
 .auth-gate {
   position: fixed; inset: 0; z-index: 2147483000;
   display: grid; place-items: center;
-  padding: 24px;
-  pointer-events: auto;
+  padding: max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom));
+  min-height: 100vh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  pointer-events: auto !important;
   touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
   background:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.34 0 0 0 0 0.22 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23n)'/%3E%3C/svg%3E"),
     linear-gradient(165deg, #f0e8d8 0%, #e4d8c4 48%, #d6c8b0 100%);
 }
 .auth-gate .auth-card,
 .auth-gate input,
-.auth-gate button { pointer-events: auto; position: relative; z-index: 1; }
+.auth-gate button { pointer-events: auto !important; position: relative; z-index: 1; }
 .auth-gate[hidden] { display: none !important; }
 .auth-card {
   width: min(360px, 100%);
@@ -84,15 +92,29 @@ html:not(.authed) body > :not(.auth-gate) { display: none !important; }
 .auth-label {
   display: block; text-align: left;
   font-size: 13px; letter-spacing: 0.08em; color: var(--muted, #8a7f70);
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
-.auth-label input {
-  display: block; width: 100%; margin-top: 8px;
+#auth-password,
+.auth-gate input[type="password"] {
+  display: block; width: 100%; margin: 0 0 12px;
   font-family: var(--sans);
-  padding: 10px 12px;
+  font-size: 16px; /* iOS 少於 16px 會強制放大並易令輸入失效 */
+  line-height: 1.4;
+  padding: 14px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--panel-border, #d6c8b2);
+  background: #fffcf7;
+  color: var(--text, #3a332b);
+  -webkit-user-select: text;
+  user-select: text;
 }
 .auth-error { min-height: 1.4em; margin: 0 0 12px; color: var(--red, #a05040); font-size: 13px; }
-.auth-card button[type="submit"] { width: 100%; padding: 10px 16px; letter-spacing: 0.12em; }
+.auth-card button[type="submit"] {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 16px;
+  letter-spacing: 0.12em;
+}
 .nav-logout {
   margin: 12px 8px 0;
   width: calc(100% - 16px);
