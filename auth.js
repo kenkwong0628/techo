@@ -1,10 +1,38 @@
-// 登入閘：擋隨便入場；個人帳目仍只在本機 localStorage
+// 登入閘：記住此裝置（localStorage），唔使每次開 App 都輸入密碼
 const Auth = (() => {
-  const SESSION_KEY = "techo-auth-ok";
+  const SESSION_KEY = "techo-auth-ok"; // 舊版 sessionStorage，會清走
+  const STORE_KEY = "techo-auth";
+  const DAYS = 90; // 記住約 3 個月；按「登出」即失效
   const readyCallbacks = [];
   let booted = false;
 
-  const unlocked = () => sessionStorage.getItem(SESSION_KEY) === "1";
+  function readStore() {
+    try {
+      return JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+    } catch {
+      return null;
+    }
+  }
+
+  function unlocked() {
+    const s = readStore();
+    if (!s || !s.until) return false;
+    if (Date.now() > s.until) {
+      localStorage.removeItem(STORE_KEY);
+      return false;
+    }
+    return true;
+  }
+
+  function remember(days = DAYS) {
+    localStorage.setItem(STORE_KEY, JSON.stringify({ until: Date.now() + days * 86400000 }));
+    try { sessionStorage.removeItem(SESSION_KEY); } catch {}
+  }
+
+  function forget() {
+    localStorage.removeItem(STORE_KEY);
+    try { sessionStorage.removeItem(SESSION_KEY); } catch {}
+  }
 
   async function sha256(text) {
     const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
@@ -51,30 +79,32 @@ const Auth = (() => {
     const input = document.getElementById("auth-password") || document.querySelector("#auth-form [name=password]");
     if (input) {
       input.value = "";
-      // 延遲 focus，等手機瀏覽器完成 layout
       setTimeout(() => {
         try { input.focus({ preventScroll: false }); } catch { input.focus(); }
       }, 100);
     }
   }
 
-  async function tryUnlock(password) {
+  async function tryUnlock(password, keep = true) {
     const expected = window.AUTH_CONFIG?.passwordHash;
     if (!expected) throw new Error("未設定密碼雜湊");
     const got = await sha256(password);
     if (got !== expected.toLowerCase()) return false;
-    sessionStorage.setItem(SESSION_KEY, "1");
+    if (keep) remember(DAYS);
+    else {
+      // 只記今次瀏覽階段
+      sessionStorage.setItem(SESSION_KEY, "1");
+      localStorage.removeItem(STORE_KEY);
+    }
     showApp();
     return true;
   }
 
   function logout() {
-    sessionStorage.removeItem(SESSION_KEY);
-    // 重新載入最乾淨，避免殘留 modal／canvas 擋住下一次登入
+    forget();
     location.reload();
   }
 
-  /** 登入成功後才執行（已登入則立即執行） */
   function onReady(fn) {
     if (typeof fn !== "function") return;
     if (document.documentElement.classList.contains("authed") || booted) fn();
@@ -82,12 +112,15 @@ const Auth = (() => {
   }
 
   function init() {
+    // 兼容舊版：曾用 sessionStorage 登入過，今次仍放行並改為記住
+    if (!unlocked() && sessionStorage.getItem(SESSION_KEY) === "1") remember(DAYS);
+
     if (!window.AUTH_CONFIG?.passwordHash) {
       console.warn("AUTH_CONFIG.passwordHash 未設定，已略過登入閘");
       showApp();
       return;
     }
-    if (unlocked()) showApp();
+    if (unlocked() || sessionStorage.getItem(SESSION_KEY) === "1") showApp();
     else lockApp();
 
     const form = document.getElementById("auth-form");
@@ -98,8 +131,9 @@ const Auth = (() => {
         ev.preventDefault();
         if (err) err.textContent = "";
         const password = form.elements.password.value;
+        const keep = form.elements.remember ? form.elements.remember.checked : true;
         try {
-          const ok = await tryUnlock(password);
+          const ok = await tryUnlock(password, keep);
           if (!ok) {
             if (err) err.textContent = "密碼不正確";
             form.elements.password.focus();
@@ -109,9 +143,8 @@ const Auth = (() => {
           if (err) err.textContent = "無法驗證密碼";
         }
       });
-      // 點整張卡都聚焦密碼欄（方便手機）
       form.addEventListener("pointerdown", (ev) => {
-        if (ev.target.closest("button, input, a")) return;
+        if (ev.target.closest("button, input, a, label")) return;
         const input = form.elements.password;
         if (input) input.focus();
       });

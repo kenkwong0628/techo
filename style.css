@@ -108,6 +108,11 @@ html:not(.authed) #app-root {
   -webkit-user-select: text;
   user-select: text;
 }
+.auth-remember {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin: 0 0 10px; font-size: 14px; color: var(--text-dim, #5a5248); cursor: pointer;
+}
+.auth-remember input { width: 18px; height: 18px; accent-color: var(--cyan, #5f7468); }
 .auth-error { min-height: 1.4em; margin: 0 0 12px; color: var(--red, #a05040); font-size: 13px; }
 .auth-card button[type="submit"] {
   width: 100%;
