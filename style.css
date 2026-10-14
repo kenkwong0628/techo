@@ -1185,39 +1185,110 @@ dialog td { color: var(--text); }
 }
 @media (max-width: 760px) {
   html, body { overflow-x: hidden; overflow-y: auto; height: auto; min-height: 100%; }
-  #app-root { flex-direction: column; overflow: visible; min-height: auto; width: 100%; }
-  .sidebar { position: static; width: auto; height: auto; margin: 10px 10px 0; padding: 12px; }
-  .logo { margin-bottom: 8px; }
+  #app-root {
+    flex-direction: column;
+    overflow: visible;
+    min-height: auto;
+    width: 100%;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    box-sizing: border-box;
+  }
+  .sidebar {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 8px 8px 0;
+    padding: 10px;
+  }
+  .logo { margin-bottom: 6px; }
+  .logo small { display: none; }
   .sidebar nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
-  .sidebar a { flex: 1 1 auto; justify-content: center; padding: 10px 12px; font-size: 14px; min-height: 44px; }
+  .sidebar a { flex: 1 1 calc(50% - 6px); justify-content: center; padding: 10px 8px; font-size: 14px; min-height: 44px; }
   .sidebar a.nav-primary { flex: 1 1 100%; background: rgba(255, 248, 235, 0.12); border: 1px solid rgba(232, 223, 208, 0.25); }
   .nav-group, .status, .nav-logout { display: none; }
   .nav-icon { display: none; }
-  main { padding: 10px 10px 140px; overflow: visible; width: auto; }
-  .topbar { position: static; top: auto; padding: 0 12px; height: 48px; margin-bottom: 14px; }
+  main {
+    padding: 8px 8px max(88px, calc(24px + env(safe-area-inset-bottom)));
+    overflow: visible;
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .topbar { position: static; top: auto; padding: 0 12px; height: 44px; margin-bottom: 10px; }
   .greeting { font-size: 13px; }
   .greeting small { display: none; }
   .clock { display: none; }
-  h2 { font-size: 22px; margin-bottom: 16px; letter-spacing: 0.12em; }
+  h2 { font-size: 20px; margin: 4px 0 12px; letter-spacing: 0.12em; }
+  #view-ledger > h2 { display: none; }
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
   .grid-3 .span-2, .span-2 { grid-column: auto; }
   .metrics, .plan { grid-template-columns: 1fr; }
   #body-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .panel { padding: 14px 12px; margin-bottom: 12px; }
 
-  /* 記帳：大按鈕，唔用 sticky，避免手機捲不動 */
+  /* 記帳：資金列可橫滑、分類三欄、提交掣貼底 */
+  #view-ledger .funds-bar {
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    max-width: 100%;
+    border-left-width: 3px;
+  }
+  #view-ledger .funds-main { flex: 0 0 auto; min-width: 0; }
+  #view-ledger .funds-main b { font-size: 24px; }
+  #view-ledger .funds-accs {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  #view-ledger .funds-acc {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
   #view-ledger .tx-form.quick-tx {
     position: static;
     z-index: auto;
     margin-bottom: 14px;
-    padding: 16px;
+    padding: 14px 12px;
+    gap: 12px;
+    max-width: 100%;
+    box-sizing: border-box;
   }
-  .tx-amount { font-size: 36px !important; min-height: 56px; }
-  .tx-type-seg span { padding: 14px 6px; font-size: 16px; min-height: 48px; display: grid; place-items: center; }
-  button.chip { flex: 1 1 calc(33.33% - 8px); min-height: 48px; font-size: 15px; }
-  .tx-fields { grid-template-columns: 1fr; }
-  .tx-fields select, .tx-fields input { min-height: 52px; font-size: 16px; }
-  .tx-submit { min-height: 56px; font-size: 20px !important; position: static; }
-  #view-ledger .funds-bar { padding: 12px 14px; font-size: 13px; }
+  .tx-amount { font-size: 34px !important; min-height: 52px; padding: 12px !important; }
+  .tx-type-seg span { padding: 12px 4px; font-size: 15px; min-height: 46px; display: grid; place-items: center; }
+  #view-ledger .chips {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  #view-ledger button.chip {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 10px 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  .tx-fields { grid-template-columns: 1fr; gap: 10px; }
+  .tx-fields select, .tx-fields input { min-height: 48px; font-size: 16px; }
+  #view-ledger .tx-submit {
+    position: sticky;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    z-index: 6;
+    min-height: 54px;
+    font-size: 18px !important;
+    margin-top: 4px;
+    box-shadow: 0 8px 24px rgba(42, 36, 28, 0.18);
+  }
   #view-ledger .period-bar { gap: 6px; }
   #view-ledger .period-bar .seg { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); }
   #view-ledger .period-label { min-width: 0; flex: 1; font-size: 15px; }
