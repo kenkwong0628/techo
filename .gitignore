@@ -1,6 +1,7 @@
 secrets/*
 !secrets/*.example.js
 *.csv
+icons/icon-source.jpg
 .DS_Store
 Thumbs.db
 *.log
