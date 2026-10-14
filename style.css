@@ -44,6 +44,15 @@ html:not(.authed) #app-root {
   pointer-events: none !important;
   user-select: none !important;
 }
+/* 包住側欄＋主區，恢復原本左右排版 */
+#app-root {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
 .auth-gate {
   position: fixed; inset: 0; z-index: 2147483000;
   display: grid; place-items: center;
@@ -145,8 +154,9 @@ body {
   font-weight: 400;
   line-height: 1.75;
   color: var(--text);
-  display: flex;
+  display: block;
   min-height: 100vh;
+  overflow-x: hidden;
   background:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.34 0 0 0 0 0.22 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23n)'/%3E%3C/svg%3E"),
     linear-gradient(165deg, #f0e8d8 0%, #e4d8c4 48%, #d6c8b0 100%) fixed;
@@ -225,7 +235,7 @@ a { color: #6a6458; text-underline-offset: 3px; }
 .backup-status.due { background: #a0453a; color: #fff; border-color: transparent; animation: shake 2.4s ease-in-out infinite; }
 
 /* ---------- 主區域 ---------- */
-main { position: relative; z-index: 1; flex: 1; padding: 12px 28px 220px; max-width: 2000px; min-width: 0; }
+main { position: relative; z-index: 1; flex: 1 1 auto; padding: 12px 28px 220px; max-width: none; min-width: 0; width: 100%; }
 
 .topbar {
   position: sticky;
@@ -1174,7 +1184,8 @@ dialog td { color: var(--text); }
   .grid-3 .span-2 { grid-column: span 2; }
 }
 @media (max-width: 760px) {
-  body { flex-direction: column; }
+  html, body { overflow-x: hidden; overflow-y: auto; height: auto; min-height: 100%; }
+  #app-root { flex-direction: column; overflow: visible; min-height: auto; width: 100%; }
   .sidebar { position: static; width: auto; height: auto; margin: 10px 10px 0; padding: 12px; }
   .logo { margin-bottom: 8px; }
   .sidebar nav { flex-direction: row; flex-wrap: wrap; gap: 6px; }
@@ -1182,8 +1193,8 @@ dialog td { color: var(--text); }
   .sidebar a.nav-primary { flex: 1 1 100%; background: rgba(255, 248, 235, 0.12); border: 1px solid rgba(232, 223, 208, 0.25); }
   .nav-group, .status, .nav-logout { display: none; }
   .nav-icon { display: none; }
-  main { padding: 10px 10px 120px; }
-  .topbar { top: 6px; padding: 0 12px; height: 48px; }
+  main { padding: 10px 10px 140px; overflow: visible; width: auto; }
+  .topbar { position: static; top: auto; padding: 0 12px; height: 48px; margin-bottom: 14px; }
   .greeting { font-size: 13px; }
   .greeting small { display: none; }
   .clock { display: none; }
@@ -1193,21 +1204,19 @@ dialog td { color: var(--text); }
   .metrics, .plan { grid-template-columns: 1fr; }
   #body-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-  /* 記帳：大按鈕、先記一筆 */
+  /* 記帳：大按鈕，唔用 sticky，避免手機捲不動 */
   #view-ledger .tx-form.quick-tx {
-    position: sticky;
-    top: 58px;
-    z-index: 4;
+    position: static;
+    z-index: auto;
     margin-bottom: 14px;
     padding: 16px;
-    box-shadow: 0 10px 28px rgba(60, 45, 25, 0.12);
   }
-  .tx-amount { font-size: 40px !important; min-height: 64px; }
+  .tx-amount { font-size: 36px !important; min-height: 56px; }
   .tx-type-seg span { padding: 14px 6px; font-size: 16px; min-height: 48px; display: grid; place-items: center; }
   button.chip { flex: 1 1 calc(33.33% - 8px); min-height: 48px; font-size: 15px; }
   .tx-fields { grid-template-columns: 1fr; }
   .tx-fields select, .tx-fields input { min-height: 52px; font-size: 16px; }
-  .tx-submit { min-height: 56px; font-size: 20px !important; position: sticky; bottom: 12px; }
+  .tx-submit { min-height: 56px; font-size: 20px !important; position: static; }
   #view-ledger .funds-bar { padding: 12px 14px; font-size: 13px; }
   #view-ledger .period-bar { gap: 6px; }
   #view-ledger .period-bar .seg { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); }
