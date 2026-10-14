@@ -1912,12 +1912,15 @@ if (typeof applyPersonalSeed === "function") {
   }
 }
 
-Effects.init();
-initPlan();
-initTime();
-renderEngineLine();
-tick();
-render();
-route();
-renderBackupStatus();
-setTimeout(checkBackup, 2500);
+// 必須登入後才啟動，避免 showModal／畫布在登入畫面擋住點擊與輸入
+Auth.onReady(() => {
+  Effects.init();
+  initPlan();
+  initTime();
+  renderEngineLine();
+  tick();
+  render();
+  route();
+  renderBackupStatus();
+  setTimeout(checkBackup, 2500);
+});
