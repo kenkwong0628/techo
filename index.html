@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>手帳</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="auth-gate" class="auth-gate">
+    <form id="auth-form" class="auth-card" autocomplete="current-password">
+      <div class="auth-mark">書</div>
+      <h1>手帳</h1>
+      <p class="muted">請輸入密碼後繼續</p>
+      <label class="auth-label">密碼
+        <input type="password" name="password" required autofocus />
+      </label>
+      <p id="auth-error" class="auth-error" role="alert"></p>
+      <button type="submit">進入</button>
+    </form>
+  </div>
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <g id="i-dashboard"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></g>
+      <g id="i-ledger"><path d="M4 2v20l3-2 3 2 3-2 3 2 3-2 1 .7V2l-1 .7-3-2-3 2-3-2-3 2-3-2z"/><path d="M8 8h8M8 12h8M8 16h5"/></g>
+      <g id="i-finance"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M16 13h2M2 10h20M6 6V4h12v2"/></g>
+      <g id="i-plan"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></g>
+      <g id="i-time"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></g>
+      <g id="i-weight"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></g>
+      <g id="i-projects"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></g>
+      <g id="i-bucket"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></g>
+      <g id="i-settings"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></g>
+    </defs>
+  </svg>
+  <aside class="sidebar">
+    <div class="logo">
+      <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="logo-ink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c4b49a"/><stop offset="1" stop-color="#8a7a5e"/></linearGradient>
+          <linearGradient id="logo-cover" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a4036"/><stop offset="1" stop-color="#2a241c"/></linearGradient>
+        </defs>
+        <path d="M6 14 Q20 9 32 15 Q44 9 58 14 V54 Q44 49 32 55 Q20 49 6 54 Z" fill="url(#logo-cover)" stroke="#1e1812" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M10 16 Q21 12 30 17 V50 Q21 46 10 50 Z M54 16 Q43 12 34 17 V50 Q43 46 54 50 Z" fill="#f4eee3" stroke="#8a7a5e" stroke-width="1.1"/>
+        <path d="M14 23 Q21 21 27 24 M14 29 Q21 27 27 30 M14 35 Q21 33 27 36 M37 24 Q43 21 50 23 M37 30 Q43 27 50 29 M37 36 Q43 33 50 35" stroke="#b8a888" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+        <path d="M32 15 V55" stroke="#1e1812" stroke-width="1.8"/>
+        <circle cx="32" cy="10" r="5.5" fill="url(#logo-ink)" stroke="#3a332b" stroke-width="1"/>
+      </svg>
+      <div>
+        <div class="logo-title">手帳</div>
+        <div class="logo-sub">日常記事</div>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-group">日常</div>
+      <a href="#dashboard" data-view="dashboard"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-dashboard"/></svg>總覽</a>
+      <div class="nav-group">財務</div>
+      <a href="#ledger" data-view="ledger"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-ledger"/></svg>記帳</a>
+      <a href="#finance" data-view="finance"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-finance"/></svg>理財</a>
+      <a href="#plan" data-view="plan"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-plan"/></svg>計劃</a>
+      <div class="nav-group">生活</div>
+      <a href="#time" data-view="time"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-time"/></svg>時間</a>
+      <a href="#weight" data-view="weight"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-weight"/></svg>體重</a>
+      <a href="#projects" data-view="projects"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-projects"/></svg>項目</a>
+      <a href="#bucket" data-view="bucket"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-bucket"/></svg>願望</a>
+      <div class="nav-group">系統</div>
+      <a href="#settings" data-view="settings"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-settings"/></svg>設定</a>
+      <button type="button" class="nav-logout" id="auth-logout">登出</button>
+    </nav>
+    <div class="status">
+      資料只儲存於本機瀏覽器。
+      <button type="button" class="ghost backup-status" id="backup-status"></button>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div class="greeting" id="greeting"></div>
+      <div class="top-right">
+        <button type="button" class="sound-btn" id="sfx-toggle" title="音效">音</button>
+        <div class="clock" id="clock"></div>
+      </div>
+    </header>
+
+    <!-- 總覽 -->
+    <section id="view-dashboard" class="view">
+      <h2>總覽 <small>DASHBOARD</small></h2>
+      <div class="cards" id="dash-cards"></div>
+      <div class="grid-3">
+        <div class="panel span-2">
+          <h3>近 6 個月收支</h3>
+          <div class="chart" id="dash-cashflow"></div>
+        </div>
+        <div class="panel">
+          <h3>本月支出分佈</h3>
+          <div class="chart" id="dash-donut"></div>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="panel span-2">
+          <h3>體重走勢</h3>
+          <div class="chart" id="dash-weight"></div>
+        </div>
+        <div class="panel">
+          <h3>預算使用</h3>
+          <div class="chart center" id="dash-budget"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>項目進度</h3>
+        <div class="rings" id="dash-rings"></div>
+      </div>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>最近記帳</h3>
+          <ul class="simple-list" id="dash-recent"></ul>
+        </div>
+        <div class="panel">
+          <h3>即將到期</h3>
+          <ul class="simple-list" id="dash-projects"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 記帳 -->
+    <section id="view-ledger" class="view">
+      <h2>記帳 <small>LEDGER</small></h2>
+      <div class="panel funds-bar" id="tx-funds"></div>
+      <form class="panel tx-form" id="tx-form">
+        <div class="seg">
+          <label><input type="radio" name="type" value="expense" checked /><span>支出</span></label>
+          <label><input type="radio" name="type" value="income" /><span>收入</span></label>
+          <label><input type="radio" name="type" value="transfer" /><span>轉帳</span></label>
+        </div>
+        <div class="chips" id="cat-chips"></div>
+        <input type="hidden" name="category" id="tx-category" />
+        <div class="form-row">
+          <input type="date" name="date" required />
+          <input type="number" name="amount" step="0.01" min="0" placeholder="金額" required />
+          <select name="accountId" id="tx-account" title="使用的帳戶／信用卡" required></select>
+          <span class="tx-arrow">→</span>
+          <select name="toAccountId" id="tx-to" title="轉入的帳戶"></select>
+          <input name="note" placeholder="備註（可選）" />
+          <button type="submit">＋ 新增</button>
+        </div>
+      </form>
+
+      <div class="toolbar period-bar">
+        <div class="seg">
+          <label><input type="radio" name="period" value="week" /><span>週</span></label>
+          <label><input type="radio" name="period" value="month" checked /><span>月</span></label>
+          <label><input type="radio" name="period" value="year" /><span>年</span></label>
+        </div>
+        <button type="button" class="ghost small" id="period-prev" title="上一期">‹</button>
+        <b class="period-label" id="period-label"></b>
+        <button type="button" class="ghost small" id="period-next" title="下一期">›</button>
+        <button type="button" class="ghost small" id="period-today">回到今天</button>
+      </div>
+      <div class="cards" id="tx-cards"></div>
+
+      <div class="panel">
+        <h3>分類預算 <small class="muted" id="catb-note"></small></h3>
+        <div class="catb-grid" id="catb-list"></div>
+        <form class="form-row mt-form" id="catb-form">
+          <input name="category" list="catb-cats" placeholder="類別（例如：飲食）" required />
+          <datalist id="catb-cats"></datalist>
+          <input type="number" name="amount" step="1" min="0" placeholder="每月上限" required />
+          <button type="submit">設定</button>
+        </form>
+      </div>
+
+      <div class="grid-3">
+        <div class="panel">
+          <h3>支出分類</h3>
+          <div class="chart" id="tx-donut"></div>
+        </div>
+        <div class="panel span-2">
+          <h3 id="tx-bars-title">每日支出</h3>
+          <div class="chart" id="tx-daily"></div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>收入來源</h3>
+          <div class="chart" id="tx-income-donut"></div>
+        </div>
+        <div class="panel">
+          <h3>累計支出走勢</h3>
+          <div class="chart" id="tx-cumulative"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>明細</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>日期</th><th>類型</th><th>類別</th><th>金額</th><th>帳戶</th><th>備註</th><th></th></tr></thead>
+            <tbody id="tx-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 理財 -->
+    <section id="view-finance" class="view">
+      <h2>理財 <small>FINANCE</small></h2>
+      <div class="cards" id="fin-cards"></div>
+
+      <div class="panel">
+        <h3>應付款項</h3>
+        <div class="bill-grid" id="bill-list"></div>
+        <form class="form-row mt-form" id="bill-form">
+          <input name="name" placeholder="名稱（例如：交稅）" required />
+          <input type="number" name="amount" step="0.01" min="0" placeholder="金額" required />
+          <input type="date" name="due" title="最遲付款日期" required />
+          <select name="fund" id="bill-fund"></select>
+          <button type="submit">＋ 新增</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h3>每月固定收支</h3>
+        <div id="rec-summary" class="rec-summary"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>名稱</th><th>類別</th><th>金額</th><th>帳戶</th><th>每月</th><th>下次入帳</th><th></th></tr></thead>
+            <tbody id="rec-table"></tbody>
+          </table>
+        </div>
+        <form class="form-row mt-form" id="rec-form">
+          <select name="type">
+            <option value="expense">支出</option>
+            <option value="income">收入</option>
+          </select>
+          <input name="name" placeholder="名稱（例如：電話費）" required />
+          <input name="category" list="rec-cats" placeholder="類別" required />
+          <datalist id="rec-cats"></datalist>
+          <input type="number" name="amount" step="0.01" min="0.01" placeholder="金額" required />
+          <select name="accountId" id="rec-account" required></select>
+          <select name="day" id="rec-day"></select>
+          <button type="submit">＋ 新增</button>
+        </form>
+        <p class="muted tiny">到期當日會自動記入記帳，並更新帳戶結餘。</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="panel">
+          <h3>資產分佈</h3>
+          <div class="chart" id="fin-alloc"></div>
+        </div>
+        <div class="panel">
+          <h3>每月預算</h3>
+          <div class="chart center" id="fin-budget"></div>
+          <form class="form-row" id="budget-form">
+            <input type="number" name="budget" step="1" min="0" placeholder="每月支出上限" required />
+            <button type="submit">設定</button>
+          </form>
+        </div>
+        <div class="panel">
+          <h3>儲蓄目標</h3>
+          <div class="rings" id="goal-rings"></div>
+          <form class="form-row" id="goal-form">
+            <input name="name" placeholder="目標（例如：旅行基金）" required />
+            <input type="number" name="target" min="0" step="1" placeholder="目標金額" required />
+            <input type="number" name="saved" min="0" step="1" placeholder="已儲" />
+            <button type="submit">＋</button>
+          </form>
+          <div id="goal-list"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>近 12 個月每月結餘（收入 − 支出）</h3>
+        <div class="chart" id="fin-monthly"></div>
+      </div>
+
+      <div class="panel">
+        <h3>我的帳戶</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>名稱</th><th>類型</th><th>用途（預留）</th><th>結餘</th><th>更新日期</th><th></th></tr></thead>
+            <tbody id="acc-table"></tbody>
+          </table>
+        </div>
+        <form class="form-row mt-form" id="acc-form">
+          <input name="name" placeholder="名稱（例如：滙豐儲蓄）" required />
+          <select name="type">
+            <option value="銀行">銀行</option>
+            <option value="現金">現金</option>
+            <option value="八達通">八達通／儲值</option>
+            <option value="投資">投資</option>
+            <option value="強積金">強積金</option>
+            <option value="負債">貸款／其他負債</option>
+          </select>
+          <input type="number" name="balance" step="0.01" placeholder="結餘" required />
+          <input name="purpose" placeholder="用途（可選，例如：交稅）" />
+          <button type="submit">＋ 新增帳戶</button>
+        </form>
+        <p class="muted tiny">設有「用途」的帳戶會視為預留資金，不計入「可動用」。記帳時選擇的帳戶，結餘會自動更新；亦可直接修改結餘（例如與銀行記錄核對）。</p>
+      </div>
+
+      <div class="panel">
+        <h3>信用卡</h3>
+        <div class="cc-grid" id="cc-list"></div>
+        <form class="form-row mt-form" id="cc-form">
+          <input name="name" placeholder="信用卡名稱" required />
+          <input type="number" name="limit" step="1" min="0" placeholder="信用額度" />
+          <input type="number" name="balance" step="0.01" min="0" placeholder="目前欠款" />
+          <input type="number" name="dueDay" min="1" max="31" placeholder="每月還款日" />
+          <button type="submit">＋ 新增信用卡</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 現金流計劃 -->
+    <section id="view-plan" class="view">
+      <h2>現金流計劃 <small>CASH FLOW PLAN</small></h2>
+      <div class="cards" id="plan-cards"></div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>逐月現金流</h3>
+          <button type="button" class="ghost small" id="plan-rebase">以目前預測作為新計劃</button>
+        </div>
+        <small class="muted">已過月份顯示實際結餘；本月及以後按薪金、固定收支、分類預算、應付款項及下方計劃動作推算。每格下方為原定計劃及差額。</small>
+        <div class="table-wrap"><table class="plan-table" id="plan-table"></table></div>
+      </div>
+
+      <div class="panel">
+        <h3>各戶口月底結餘走勢</h3>
+        <div class="chart" id="plan-chart"></div>
+      </div>
+
+      <div class="panel">
+        <h3>計劃動作</h3>
+        <small class="muted">按「完成」會自動記入記帳並更新帳戶結餘，毋須另外記帳。</small>
+        <ul class="plan-list" id="plan-list"></ul>
+        <form class="form-row mt-form" id="plan-form">
+          <select name="kind">
+            <option value="transfer">轉帳</option>
+            <option value="expense">支出</option>
+            <option value="income">收入</option>
+          </select>
+          <input type="date" name="date" required />
+          <input type="number" name="amount" step="0.01" min="0" placeholder="金額" required />
+          <select name="from"></select>
+          <select name="to"></select>
+          <input name="category" placeholder="類別（支出／收入用）" />
+          <input name="note" placeholder="說明（例如：存稅）" required />
+          <button type="submit">＋ 加入計劃</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 時間管理 -->
+    <section id="view-time" class="view">
+      <h2>時間管理 <small>CALENDAR</small></h2>
+      <div class="cards" id="time-cards"></div>
+
+      <div class="time-layout">
+        <div class="panel cal-panel">
+          <div class="toolbar period-bar">
+            <button type="button" class="ghost small" id="cal-prev" title="上個月">‹</button>
+            <b class="period-label" id="cal-label"></b>
+            <button type="button" class="ghost small" id="cal-next" title="下個月">›</button>
+            <button type="button" class="ghost small" id="cal-today">回到今天</button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+
+        <div class="panel day-panel" id="day-panel">
+          <h3 id="day-title"></h3>
+          <ul class="day-list" id="day-list"></ul>
+          <form class="ev-form" id="ev-form">
+            <input name="title" placeholder="事項名稱（例如：射箭練習）" required />
+            <div class="chips" id="ev-cats"></div>
+            <div class="ev-row">
+              <label>日期 <input type="date" name="date" required /></label>
+            </div>
+            <div class="ev-row">
+              <label>開始 <input type="time" name="start" /></label>
+              <label>結束 <input type="time" name="end" /></label>
+            </div>
+            <div class="ev-row">
+              <label>重複
+                <select name="repeat">
+                  <option value="none">不重複</option>
+                  <option value="daily">每日</option>
+                  <option value="weekdays">逢星期一至五</option>
+                  <option value="weekly">每週</option>
+                  <option value="monthly">每月</option>
+                </select>
+              </label>
+              <label>直至 <input type="date" name="until" title="重複至（可留空）" /></label>
+            </div>
+            <input name="note" placeholder="備註（可選）" />
+            <small class="muted">不填時間即為全日事項。</small>
+            <button type="submit">＋ 加入事項</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>未來 7 天</h3>
+        <div class="agenda" id="agenda"></div>
+      </div>
+    </section>
+
+    <!-- 體重 -->
+    <section id="view-weight" class="view">
+      <h2>體重管理 <small>BODY SCAN</small></h2>
+      <div class="cards" id="wt-cards"></div>
+
+      <div class="grid-3">
+        <div class="panel span-2">
+          <h3>體重趨勢</h3>
+          <div class="chart" id="wt-chart"></div>
+        </div>
+        <div class="panel">
+          <h3>快速記錄體重</h3>
+          <form class="form-row" id="wt-form">
+            <input type="date" name="date" required />
+            <input type="number" name="weight" step="0.1" min="0" placeholder="體重 (kg)" required />
+            <button type="submit">記錄</button>
+          </form>
+          <h3 class="mt">匯入體脂磅數據</h3>
+          <div class="import-actions">
+            <button type="button" class="big-btn hero" id="open-scan"><span>📷</span>匯入體脂磅截圖</button>
+            <p class="muted tip">提示：在 WhatsApp／相簿複製圖片後，回到此頁直接按 Ctrl+V 亦可。</p>
+            <div class="import-row">
+              <button type="button" class="big-btn" id="open-body-form"><span>✎</span>手動輸入</button>
+              <button type="button" class="big-btn alt" id="open-body-import"><span>⇪</span>文字／CSV</button>
+            </div>
+          </div>
+          <h3 class="mt">個人資料</h3>
+          <form class="form-grid" id="profile-form">
+            <label>身高 (cm)<input type="number" name="height" step="0.1" min="0" /></label>
+            <label>性別
+              <select name="gender"><option value="male">男</option><option value="female">女</option></select>
+            </label>
+            <label>年齡<input type="number" name="age" min="0" max="120" /></label>
+            <label>目標體重 (kg)<input type="number" name="target" step="0.1" min="0" placeholder="留空自動建議" /></label>
+            <label class="full">活動量<select name="activity"></select></label>
+            <button type="submit" class="full">儲存資料</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>身體分析 <small>AI ANALYSIS</small></h2>
+        <span class="muted" id="body-date"></span>
+      </div>
+      <div id="body-analysis">
+        <div class="grid-3">
+          <div class="panel">
+            <h3>人體掃描</h3>
+            <div id="body-scan"></div>
+          </div>
+          <div class="panel">
+            <h3>身體組成</h3>
+            <div class="chart" id="body-composition"></div>
+          </div>
+          <div class="panel">
+            <h3>健康雷達</h3>
+            <div class="chart" id="body-radar"></div>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="panel">
+            <h3>身體類型</h3>
+            <div id="body-type"></div>
+            <h3 class="mt">BMI 指標</h3>
+            <div id="wt-bmi"></div>
+            <h3 class="mt">目標進度</h3>
+            <div class="chart center" id="wt-progress"></div>
+          </div>
+          <div class="panel span-2">
+            <h3>各項指標（對比上次）</h3>
+            <div class="metrics" id="body-metrics"></div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>AI 分析報告</h3>
+            <div class="insights" id="body-insights"></div>
+          </div>
+          <div class="panel">
+            <h3>建議計劃</h3>
+            <div class="plan" id="body-plan"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>指標趨勢 <select id="trend-metric" class="inline-select"></select></h3>
+          <div class="chart" id="body-trend"></div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="panel span-2">
+          <h3>每次體重變化</h3>
+          <div class="chart" id="wt-diff"></div>
+        </div>
+        <div class="panel">
+          <h3>記錄</h3>
+          <div class="table-wrap scroll">
+            <table>
+              <thead><tr><th>日期</th><th>kg</th><th>體脂</th><th>變化</th><th></th></tr></thead>
+              <tbody id="wt-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <dialog id="body-dialog">
+        <form id="body-form" method="dialog">
+          <h3>體脂磅記錄</h3>
+          <p class="muted">請按體脂磅 App 顯示的數字填寫，沒有的項目可留空。體重必填。</p>
+          <div class="ocr-note" id="ocr-note" hidden></div>
+          <div class="form-grid" id="body-fields">
+            <label class="full">日期<input type="date" name="date" required /></label>
+          </div>
+          <div class="dialog-actions">
+            <button type="button" class="ghost" data-close>取消</button>
+            <button type="submit">儲存並分析</button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog id="scan-dialog">
+        <div class="dialog-body">
+          <h3>匯入體脂磅截圖</h3>
+          <p class="muted">選擇體脂磅 App 的截圖、拖放圖片至此，或直接按 Ctrl+V 貼上。辨識完成後會先讓你核對，然後才儲存。</p>
+          <label class="drop-zone" id="drop-zone">
+            <input type="file" id="scan-file" accept="image/*" hidden />
+            <div class="drop-hint" id="drop-hint"><span>📷</span>按此選擇圖片<br /><small>或拖放圖片／Ctrl+V 貼上</small></div>
+            <div class="scan-preview" id="scan-preview" hidden>
+              <img id="scan-img" alt="截圖預覽" />
+              <div class="scan-laser"></div>
+            </div>
+          </label>
+          <div class="engine-line" id="engine-line"></div>
+          <div class="ocr-status" id="ocr-status"></div>
+          <div class="ocr-progress"><div id="ocr-bar"></div></div>
+          <div class="dialog-actions">
+            <button type="button" class="ghost" data-close>取消</button>
+          </div>
+        </div>
+      </dialog>
+
+      <dialog id="import-dialog">
+        <div class="dialog-body">
+          <h3>匯入體脂磅數據</h3>
+          <p class="muted">
+            方法一：在體脂磅 App 匯出 CSV／Excel（另存為 CSV），然後選擇檔案。<br />
+            方法二：直接貼上報告文字，例如「體重 76.7kg 體脂率 24.7% 內臟脂肪 10 …」。
+          </p>
+          <div class="form-row">
+            <label class="btn-like">選擇 CSV 檔案<input type="file" id="body-file" accept=".csv,.txt,.tsv" hidden /></label>
+            <button type="button" class="ghost" id="download-template">下載 CSV 範本</button>
+          </div>
+          <textarea id="import-text" rows="7" placeholder="在此貼上 CSV 內容或報告文字…"></textarea>
+          <div id="import-preview"></div>
+          <div class="dialog-actions">
+            <button type="button" class="ghost" data-close>取消</button>
+            <button type="button" class="ghost" id="import-parse">解析</button>
+            <button type="button" id="import-confirm" disabled>確認匯入</button>
+          </div>
+        </div>
+      </dialog>
+    </section>
+
+    <!-- 項目 -->
+    <section id="view-projects" class="view">
+      <h2>項目管理 <small>PROJECTS</small></h2>
+      <form class="panel form-row" id="proj-form">
+        <input name="group" list="proj-groups" placeholder="分組（例如：遊戲開發）" />
+        <datalist id="proj-groups"></datalist>
+        <input name="name" placeholder="項目名稱" required />
+        <input type="date" name="deadline" title="截止日期" />
+        <input name="note" placeholder="描述（可選）" />
+        <button type="submit">＋ 新增項目</button>
+      </form>
+      <div class="grid-3">
+        <div class="panel">
+          <h3>狀態分佈</h3>
+          <div class="chart" id="proj-donut"></div>
+        </div>
+        <div class="panel">
+          <h3>整體平均進度</h3>
+          <div class="chart center" id="proj-overall"></div>
+        </div>
+        <div class="panel">
+          <h3>各項目進度</h3>
+          <div class="chart" id="proj-bars"></div>
+        </div>
+      </div>
+      <div class="toolbar proj-groups-bar">
+        <span>組別</span>
+        <div class="chips" id="proj-group-chips"></div>
+      </div>
+      <div class="toolbar">
+        <label>狀態
+          <select id="proj-filter">
+            <option value="all">全部</option>
+            <option value="todo">未開始</option>
+            <option value="doing">進行中</option>
+            <option value="done">已完成</option>
+          </select>
+        </label>
+        <span class="muted tiny">按住項目名稱旁的 ≡ 拖拉，即可按重要性排列先後次序（1 為最重要）</span>
+      </div>
+      <div class="project-grid" id="proj-list"></div>
+    </section>
+
+    <!-- 願望清單 -->
+    <section id="view-bucket" class="view">
+      <h2>願望清單 <small>BUCKET LIST</small></h2>
+      <form class="panel form-row" id="wish-form">
+        <input name="text" placeholder="人生中想做的事…" required />
+        <input name="category" list="wish-cats" placeholder="類別（例如：旅行）" />
+        <datalist id="wish-cats"></datalist>
+        <button type="submit">＋ 加入願望</button>
+      </form>
+      <div class="grid-3">
+        <div class="panel">
+          <h3>整體達成率</h3>
+          <div class="chart center" id="wish-overall"></div>
+        </div>
+        <div class="panel">
+          <h3>各類別進度</h3>
+          <div class="chart" id="wish-bycat"></div>
+        </div>
+        <div class="panel">
+          <h3>最近達成</h3>
+          <div class="chart" id="wish-recent"></div>
+        </div>
+      </div>
+      <div class="toolbar chips" id="wish-filter">
+        <button type="button" class="chip" data-filter="all">全部</button>
+        <button type="button" class="chip" data-filter="todo">未達成</button>
+        <button type="button" class="chip" data-filter="done">已達成</button>
+      </div>
+      <div class="wish-grid" id="wish-list"></div>
+    </section>
+
+    <!-- 設定 -->
+    <section id="view-settings" class="view">
+      <h2>設定 <small>SETTINGS</small></h2>
+      <div class="panel">
+        <h3>資料備份</h3>
+        <p class="muted">所有資料均儲存於本機瀏覽器中。建議定期匯出備份；更換電腦或清除瀏覽器資料前，務必先匯出。</p>
+        <div class="form-row">
+          <button id="export-btn">匯出備份 (JSON)</button>
+          <label class="btn-like">匯入備份<input type="file" id="import-file" accept=".json" hidden /></label>
+          <button id="clear-btn" class="danger">清除所有資料</button>
+        </div>
+        <div class="form-row mt-form">
+          <label class="muted">定期提醒匯出
+            <select id="backup-remind">
+              <option value="3">每 3 天</option>
+              <option value="7">每 7 天</option>
+              <option value="14">每 14 天</option>
+              <option value="30">每 30 天</option>
+              <option value="0">不提醒</option>
+            </select>
+          </label>
+          <span class="muted" id="backup-info"></span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>音效與特效</h3>
+        <div class="sound-panel">
+          <label><input type="checkbox" id="pref-sfx" />操作音效</label>
+          <label>音效音量<input type="range" id="pref-sfx-vol" min="0" max="100" /></label>
+          <label><input type="checkbox" id="pref-particles" />淡墨塵特效</label>
+        </div>
+        <p class="muted tiny">音效由瀏覽器即時合成，毋須下載。瀏覽器規定須先點擊頁面一次，才可開始播放聲音。</p>
+      </div>
+      <div class="panel">
+        <h3>截圖 AI 辨識（建議設定）</h3>
+        <p class="muted">
+          未設定時，會使用內置文字辨識（免費、毋須帳戶，但準確度一般）。<br />
+          設定 Google Gemini 後，截圖辨識會準確得多，並設有免費額度。<br />
+          取得密鑰：前往 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>
+          → 以 Google 帳戶登入 → 「Create API key」→ 複製並貼於下方。<br />
+          密鑰只會儲存於本機，不會包含在匯出的備份中。
+        </p>
+        <form class="form-row" id="gemini-form">
+          <input type="password" name="key" placeholder="Gemini API 密鑰" autocomplete="off" />
+          <input name="model" placeholder="模型（預設 gemini-flash-latest，不使用 Pro）" />
+          <button type="submit">儲存</button>
+          <button type="button" class="ghost" id="gemini-clear">移除密鑰</button>
+        </form>
+        <p class="muted" id="gemini-status"></p>
+      </div>
+      <div class="panel">
+        <h3>貨幣符號</h3>
+        <form class="form-row" id="currency-form">
+          <input name="currency" placeholder="例如 HK$" />
+          <button type="submit">儲存</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="backup-dialog">
+    <div class="backup-rune">書</div>
+    <h3>要匯出備份嗎？</h3>
+    <p id="backup-msg"></p>
+    <p class="muted tiny">資料只儲存於這部電腦的瀏覽器，清除瀏覽器資料或更換電腦都會令資料消失。</p>
+    <div class="dialog-actions">
+      <button type="button" class="ghost" id="backup-later">稍後再說</button>
+      <button type="button" id="backup-now">匯出備份</button>
+    </div>
+  </dialog>
+
+  <script src="auth.config.js"></script>
+  <script src="auth.js"></script>
+  <script src="secrets/keys.js"></script>
+  <script src="secrets/personal.js"></script>
+  <script src="effects.js"></script>
+  <script src="sound.js"></script>
+  <script src="charts.js"></script>
+  <script src="body.js"></script>
+  <script src="ocr.js"></script>
+  <script src="plan.js"></script>
+  <script src="time.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

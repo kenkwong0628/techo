@@ -1,0 +1,6 @@
+secrets/*
+!secrets/*.example.js
+*.csv
+.DS_Store
+Thumbs.db
+*.log
